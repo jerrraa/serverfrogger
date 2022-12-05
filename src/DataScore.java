@@ -1,4 +1,3 @@
-package fall2022;
 
 public enum DataScore {
 //singleton to store our data

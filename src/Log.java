@@ -1,4 +1,3 @@
-package fall2022;
 
 import javax.swing.JLabel;
 
@@ -31,7 +30,7 @@ public class Log extends Sprite implements Runnable {
 	public void GrabFrogLabel(JLabel temp) {
 		this.froglabel = temp;
 	}
-	public void GrabGame(Gameprep temp) {
+	public void GrabGame(FroggerServer temp) {
 	}
 	public void SetSpeed(int s) {
 		this.speed = s;

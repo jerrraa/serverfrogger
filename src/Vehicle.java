@@ -1,10 +1,9 @@
-package fall2022;
 
 import javax.swing.JLabel;
 
 public class Vehicle extends Sprite implements Runnable {
 	private Frog1 frog1;
-	private Gameprep gamekill;
+	private FroggerServer gamekill;
 	private Boolean moving;
 	private Thread newt;
 	private JLabel vehicleLabel;
@@ -36,7 +35,7 @@ public class Vehicle extends Sprite implements Runnable {
 	public void GrabFrog1(Frog1 temp) {
 		this.frog1 = temp;
 	}
-	public void GrabGame(Gameprep gameprep) {
+	public void GrabGame(FroggerServer gameprep) {
 		this.gamekill = gameprep;
 		
 	}
@@ -73,7 +72,7 @@ public class Vehicle extends Sprite implements Runnable {
 	public void detectCollision() {
 		if (this.rect.intersects(frog1.rect)) {
 			System.out.println("touched");
-			gamekill.Resetfrogger();
+			//gamekill.Resetfrogger();
 		}
 	}
 }
@@ -87,7 +86,7 @@ class ReverseVehicle extends Sprite implements Runnable {
 	private Thread fast;
 	private JLabel vehicleLabel;
 	private Frog1 frog1;
-	private Gameprep gamekill;
+	private FroggerServer gamekill;
 	private int speed;
 	public ReverseVehicle() {
 		this.moving = false;
@@ -112,7 +111,7 @@ class ReverseVehicle extends Sprite implements Runnable {
 	public void GrabFrog1(Frog1 temp) {
 		this.frog1 = temp;
 	}
-	public void GrabGame(Gameprep gameprep) {
+	public void GrabGame(FroggerServer gameprep) {
 		this.gamekill = gameprep;
 		
 	}
@@ -152,7 +151,7 @@ class ReverseVehicle extends Sprite implements Runnable {
 	public void detectCollision() {
 		if (this.rect.intersects(frog1.rect)) {
 			System.out.println("touched");
-			gamekill.Resetfrogger();
+			//gamekill.Resetfrogger();
 		}
 	}
 }

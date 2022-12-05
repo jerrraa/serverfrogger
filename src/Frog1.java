@@ -1,11 +1,10 @@
-package fall2022;
 
 //this is the object where we control via keyboard
 //and user frogger
 public class Frog1 extends Sprite implements Runnable{
 	
 private Boolean visible, moving;
-private Gameprep game;
+private FroggerServer game;
 private int lives;
 	public Frog1() {
 		this.visible = true;
@@ -48,7 +47,7 @@ private int lives;
 		Thread t = new Thread(this, "Top");
 		t.start();
 	}
-	public void GetGame(Gameprep main) {
+	public void GetGame(FroggerServer main) {
 		this.game = main;
 	}
 	@Override
@@ -56,7 +55,8 @@ private int lives;
 		// TODO Auto-generated method stud
 			if (this.getY() <= 74 && this.getY() >= -10 && this.getX() >= -10 && this.getX() <= 940) {
 					this.setMoving(false);
-					game.AddToScore();
+					System.out.println("TOP");
+					//game.AddToScore();
 			}
 		}
 }

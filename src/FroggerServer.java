@@ -1,38 +1,39 @@
-package fall2022;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class Gameprep extends JFrame implements KeyListener{
+public class FroggerServer extends JFrame implements KeyListener{
 	private static final long serialVersionUID = 1L;
 	//
 	private Frog1 frog1;
 	private Container content;
 	private JLabel frog1Label;
 	private ImageIcon frog1Image;
-	private PanelData NewPanel = new PanelData();
 	
-	private JLabel VEHICLElabel, VEHICLElabel2, VEHICLElabel3;
-	private ImageIcon vehicleicon = new ImageIcon(getClass().getResource("textures/car.png"));
-	private ImageIcon vehicleicon2 = new ImageIcon(getClass().getResource("textures/car2.png"));
+	private JLabel VEHICLElabel, VEHICLElabel2, VEHICLElabel3;;
 	private Vehicle vehiclelane[];
 	private ReverseVehicle vehiclelane1[];
 	private Vehicle vehiclelane2[];
 	
 	private JLabel LOGlabel, LOGlabel2, LOGlabel3, LOGlabel4, LOGlabel5;
+	
 	private Log LogLane[];
 	private Log LogLane1[];
 	private Log LogLane2[];
 	private Log LogLane3[];
 	private Log LogLane4[];
-	private ImageIcon logicon = new ImageIcon(getClass().getResource("textures/log.png"));
-	
 	
 	private int offset = 300;
 	private int heightveh = 90;
@@ -45,45 +46,26 @@ public class Gameprep extends JFrame implements KeyListener{
 	private int xreset = 400;
 	private int yreset = 914;
 	
-	public Gameprep() {
-		DisplayContents();
-	}
-	public void Resetfrogger() {
-		// add a life counter and update position
-		lifes--;
-		frog1.SetLives(lifes);
-		DataScore.INSTANCE.MinusScore(score);
-		NewPanel.SetNewScore(DataScore.INSTANCE.GetScore());
-		LifeText.setText("Lifes: " + frog1.GetLives());
-		ScoreText.setText("Score: " + DataScore.INSTANCE.GetScore());
-		frog1.setX(xreset); frog1.setY(yreset);
-		frog1Label.setLocation(frog1.getX(), frog1.getY());
-		//if it reaches 0 we kill the frog
-		if (frog1.GetLives() <= 0) {
-			DataScore.INSTANCE.SetScore(0);
-			Restartgame();
+	public FroggerServer() throws IOException {
+		
+		int SERVER_PORT = 5556;
+		ServerSocket server = new ServerSocket(SERVER_PORT);
+		System.out.println("Waiting for clients to connect...");
+		while(true) {
+			Socket s = server.accept();
+			System.out.println ("Client connected! On port: "+SERVER_PORT);
+			
+			GameServer myService2 = new GameServer(s);
+			Thread t = new Thread(myService2);
+			t.start();
 		}
 	}
-	public void AddToScore() {
-		// scoring system
-		// for our scoring system we use a singleton instance
-		DataScore.INSTANCE.addScore(score);
-		ScoreText.setText("Score: " + DataScore.INSTANCE.GetScore());
-		NewPanel.GeneratePanel();
-		NewPanel.ResetFunction(this);
-		NewPanel.SetNewScore(DataScore.INSTANCE.GetScore());
-		
-	}
+
 	//comment test
-	public void Restartgame() {
-		//resets game
-		Gameprep.this.setVisible(false);
-		Gameprep.this.dispose();
-		new Gameprep();
-		Gameprep.main(null);
-	}
-	public static void main(String[] args) {
-		Gameprep game = new Gameprep();
+
+	public static void main(String[] args) throws IOException {
+		FroggerServer game = new FroggerServer();
+		
 		game.setVisible(true);
 	}
 	@Override
@@ -249,9 +231,7 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++ ) {
 			vehiclelane[i] = new Vehicle();
 			VEHICLElabel = new JLabel(); 
-			VEHICLElabel.setIcon(vehicleicon);
 			VEHICLElabel.setSize(widthveh, heightveh);
-			
 			vehiclelane[i].SetVehicleLabel(VEHICLElabel);
 			vehiclelane[i].setHeight(heightveh); vehiclelane[i].setWidth(widthveh);
 			vehiclelane[i].setX(vehiclelane[i].getX() + Xoffset);
@@ -270,7 +250,6 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++ ) {
 			vehiclelane1[i] = new ReverseVehicle();
 			VEHICLElabel2 = new JLabel(); 
-			VEHICLElabel2.setIcon(vehicleicon2);
 			VEHICLElabel2.setSize(widthveh, heightveh);
 			vehiclelane1[i].SetVehicleLabel(VEHICLElabel2);
 			vehiclelane1[i].setHeight(heightveh); vehiclelane1[i].setWidth(widthveh);
@@ -291,7 +270,6 @@ public class Gameprep extends JFrame implements KeyListener{
 			vehiclelane2[i].GrabFrog1(frog1);
 			vehiclelane2[i].GrabGame(this);
 			VEHICLElabel3 = new JLabel(); 
-			VEHICLElabel3.setIcon(vehicleicon);
 			VEHICLElabel3.setSize(widthveh, heightveh);
 			vehiclelane2[i].SetVehicleLabel(VEHICLElabel3);
 			vehiclelane2[i].setHeight(heightveh); vehiclelane2[i].setWidth(widthveh);
@@ -309,7 +287,7 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++) {
 			LogLane[i] = new Log();
 			LOGlabel = new JLabel();
-			LOGlabel.setIcon(logicon);
+
 			LOGlabel.setSize(200, 80);
 			LogLane[i].setHeight(90);
 			LogLane[i].setWidth(160);
@@ -329,7 +307,6 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++) {
 			LogLane1[i] = new Log();
 			LOGlabel2 = new JLabel();
-			LOGlabel2.setIcon(logicon);
 			LOGlabel2.setSize(200, 80);
 			LogLane1[i].setHeight(95);
 			LogLane1[i].setWidth(160);
@@ -348,7 +325,6 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++) {
 			LogLane2[i] = new Log();
 			LOGlabel3 = new JLabel();
-			LOGlabel3.setIcon(logicon);
 			LOGlabel3.setSize(200, 80);
 			LogLane2[i].setHeight(95);
 			LogLane2[i].setWidth(160);
@@ -367,7 +343,6 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++) {
 			LogLane3[i] = new Log();
 			LOGlabel4 = new JLabel();
-			LOGlabel4.setIcon(logicon);
 			LOGlabel4.setSize(200, 80);
 			LogLane3[i].setHeight(95);
 			LogLane3[i].setWidth(160);
@@ -388,7 +363,6 @@ public class Gameprep extends JFrame implements KeyListener{
 		for (int i = 0; i<4; i++) {
 			LogLane4[i] = new Log();
 			LOGlabel5 = new JLabel();
-			LOGlabel5.setIcon(logicon);
 			LOGlabel5.setSize(200, 80);
 			LogLane4[i].setHeight(95);
 			LogLane4[i].setWidth(160);

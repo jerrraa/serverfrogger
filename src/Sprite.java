@@ -1,4 +1,3 @@
-package fall2022;
 
 import java.awt.Rectangle;
 
