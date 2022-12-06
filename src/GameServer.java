@@ -46,27 +46,32 @@ public class GameServer implements Runnable {
 	}
 	
 	public void executeCommand(String command) throws IOException{
+		Socket s2 = new Socket("localhost", CLIENT_PORT);
+		if ( command.equals("VERT")) {
+			int speed = in.nextInt();
 		
-		if ( command.equals("PLAYER")) {
-			int playerNo = in.nextInt();
-			String playerAction = in.next();
-			System.out.println("Player "+playerNo+" moves "+playerAction);
-			
-			
-			//send a response
-			Socket s2 = new Socket("localhost", CLIENT_PORT);
 			
 			//Initialize data stream to send data out
 			OutputStream outstream = s2.getOutputStream();
 			PrintWriter out = new PrintWriter(outstream);
-
-			String commandOut = "PLAYER "+playerNo+" POSTION 500 400\n";
-			System.out.println("Sending: " + commandOut);
+			String commandOut = "VERT "+speed;
+			//System.out.println("Sending: " + commandOut);
 			out.println(commandOut);
 			out.flush();
-				
 			s2.close();
 
+		} else if (command.equals("SIDE")) {
+			int speed = in.nextInt();
+		
+			
+			//Initialize data stream to send data out
+			OutputStream outstream = s2.getOutputStream();
+			PrintWriter out = new PrintWriter(outstream);
+			String commandOut = "SIDE "+speed;
+			//System.out.println("Sending: " + commandOut);
+			out.println(commandOut);
+			out.flush();
+			s2.close();
 		}
 	}
 }
