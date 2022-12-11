@@ -48,26 +48,26 @@ public class GameServer implements Runnable {
 	public void executeCommand(String command) throws IOException{
 		Socket s2 = new Socket("localhost", CLIENT_PORT);
 		if ( command.equals("VERT")) {
-			int speed = in.nextInt();
+			String direction = in.next();
 		
 			
 			//Initialize data stream to send data out
 			OutputStream outstream = s2.getOutputStream();
 			PrintWriter out = new PrintWriter(outstream);
-			String commandOut = "VERT "+speed;
+			String commandOut = "VERT "+direction;
 			//System.out.println("Sending: " + commandOut);
 			out.println(commandOut);
 			out.flush();
 			s2.close();
 
 		} else if (command.equals("SIDE")) {
-			int speed = in.nextInt();
-		
+			String direction = in.next();
+			
 			
 			//Initialize data stream to send data out
 			OutputStream outstream = s2.getOutputStream();
 			PrintWriter out = new PrintWriter(outstream);
-			String commandOut = "SIDE "+speed;
+			String commandOut = "SIDE "+direction;
 			//System.out.println("Sending: " + commandOut);
 			out.println(commandOut);
 			out.flush();
